@@ -1,32 +1,39 @@
 const express = require('express');
+const bodyParser = require('body-parser'); 
 
 const app = express();
 
-app.use('/',(req,res,next)=>{
-    console.log('this is middleware');
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/', (req, res, next) => {
+    console.log('Middleware for all requests');
     next();
-})
-app.use('/product',(req,res,next)=>{
-    console.log('this is product');
+});
 
-    res.send('<h1>Hello This Welcome to product Page!</h1>');
+app.use('/add-product', (req, res, next) => {
+    res.send(`
+        <form action="/product" method="POST">
+            <h1>Welcome to Add Product Page!</h1>
+            <label>Product Title:</label>
+            <input name="title" type="text" required />
+            <br>
+            <label>Product Size:</label>
+            <input name="size" type="text" required />
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    `);
+});
 
-})
+app.use('/product', (req, res, next) => {
+    console.log('Form Data:', req.body); // Logs { title: 'value', size: 'value' }
+    res.redirect('/');
+});
 
-app.use('/app-product',(req,res,next)=>{
-    console.log('this is app-product');
+app.use('/', (req, res, next) => {
+    res.send('<h1>Hello, good evening!</h1>');
+});
 
-    res.send('<h1>Hello This Welcome to product Page 1!</h1>');
-
-})
-
-app.use('/home',(req,res,next)=>{
-    console.log('this is home');
-
-    res.send('<h1>Hello good evening!</h1>');
-
-})
-
-
-
-app.listen(3000);
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
