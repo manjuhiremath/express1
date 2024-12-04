@@ -1,22 +1,13 @@
 const express = require('express');
 const path = require('path');
-
+const bodyParser = require('body-parser');
+const app = express();
 const router = express.Router();
 
+router.use(bodyParser.urlencoded({extended:false}))
 // /admin/add-product => GET
 router.get('/add-product', (req, res) => {
-    res.send(`
-        <form action="/admin/add-product" method="POST">
-            <h1>Welcome to Add Product Page!</h1>
-            <label>Product Title:</label>
-            <input name="title" type="text" required />
-            <br>
-            <label>Product Size:</label>
-            <input name="size" type="text" required />
-            <br>
-            <button type="submit">Submit</button>
-        </form>
-    `);
+    res.status(200).sendFile(path.join(__dirname,'../','views','add-product.html'))
 });
 
 // /admin/add-product => POST
